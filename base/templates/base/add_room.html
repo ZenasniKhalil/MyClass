@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% block content %}
+<center>
+    <div style="margin: 50px;">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            {% if add_condition %}
+            <input type="submit" class="btn btn-primary" value="Create Room">
+            {% else %}
+            <input type="submit" class="btn btn-primary" value="Edit Room">
+            {% endif %}
+        </form>
+    </div>
+</center>
+
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+{% block content %}
+<style>
+    .scroll {
+    max-height: 600px;
+    overflow-y: auto;
+    }
+    ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: gainsboro;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: black;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        #scroll-to-bottom {
+  font-weight: bold;
+  color: green;
+}
+</style>
+<center>
+    <div class="card text-center">
+        <div class="card-header">
+          Created by <strong>@{{room.host}}</strong>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">{{room.name}}</h2>
+          <p class="card-text">{{room.description}}</p>
+        </div>
+        <div class="card-footer text-muted">
+          {{room.updated|timesince}} ago
+        </div>
+      </div>
+</center>
+    <br>
+    <div>
+        <div class="card" >
+            <div class="card-body scroll" >
+                {% for m in room_messages %}
+                {% if request.user == m.user %}
+                <div style="margin-right: 300px;">
+                    <strong style="font-size: large;">@{{m.user}}</strong>&nbsp; {{m.updated|timesince}}
+                    <div class="card" style="background-color: rgb(213, 213, 213);">
+                        <div class="card-body"  >
+                            <p >{{m.body}}</p>
+                            <a href="{% url 'base:delete_message' m.id %}"><button class="btn btn-outline-danger" >Delete</button></a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                {% else %}
+                <div class="text-right" style="margin-left: 300px;">
+                    {{m.updated|timesince}} &nbsp; <strong>@{{m.user}}</strong> 
+                    <div class="card" style="background-color: rgb(213, 213, 213);">
+                        <div class="card-body"  >
+                            <p >{{m.body}}</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+          <br>
+          <form action="" method="POST">
+            {% csrf_token %}
+            {{form.body}}
+            <br>
+            <input type="submit" value="Send" class="btn btn-outline-primary">
+          </form>
+    </div>
+
+{% endblock %}

@@ -11,6 +11,7 @@ class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     description = models.TextField(blank=True, null=True)
+    participant = models.ManyToManyField(User, related_name='participants', blank=True)
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
     class Meta:

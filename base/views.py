@@ -78,6 +78,7 @@ def room(request, id):
             room=room,
             body = request.POST['body'],
         )
+        room.participant.add(request.user)
         return redirect('base:room',room.id)
     context = {
         'room':room,

@@ -23,6 +23,13 @@
   font-weight: bold;
   color: green;
 }
+    .room-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+    .room-containers{
+        margin: 30px;
+    }
 </style>
 <center>
     <div class="card text-center">
@@ -39,42 +46,58 @@
       </div>
 </center>
     <br>
-    <div>
-        <div class="card" >
-            <div class="card-body scroll" >
-                {% for m in room_messages %}
-                {% if request.user == m.user %}
-                <div style="margin-right: 300px;">
-                    <strong style="font-size: large;">@{{m.user}}</strong>&nbsp; {{m.updated|timesince}}
-                    <div class="card" style="background-color: rgb(213, 213, 213);">
-                        <div class="card-body"  >
-                            <p >{{m.body}}</p>
-                            <a href="{% url 'base:delete_message' m.id %}"><button class="btn btn-outline-danger" >Delete</button></a>
+    <div class="room-container">
+        <div class="room-containers">
+            <div class="card" >
+                <div class="card-body scroll" >
+                    {% for m in room_messages %}
+                    {% if request.user == m.user %}
+                    <div style="margin-right: 300px;">
+                        <strong style="font-size: large;">@{{m.user}}</strong>&nbsp; {{m.updated|timesince}}
+                        <div class="card" style="background-color: rgb(213, 213, 213);">
+                            <div class="card-body"  >
+                                <p >{{m.body}}</p>
+                                <a href="{% url 'base:delete_message' m.id %}"><button class="btn btn-outline-danger" >Delete</button></a>
+                            </div>
                         </div>
+                        <br>
                     </div>
-                    <br>
-                </div>
-                {% else %}
-                <div class="text-right" style="margin-left: 300px;">
-                    {{m.updated|timesince}} &nbsp; <strong>@{{m.user}}</strong> 
-                    <div class="card" style="background-color: rgb(213, 213, 213);">
-                        <div class="card-body"  >
-                            <p >{{m.body}}</p>
+                    {% else %}
+                    <div class="text-right" style="margin-left: 300px;">
+                        {{m.updated|timesince}} &nbsp; <strong>@{{m.user}}</strong> 
+                        <div class="card" style="background-color: rgb(213, 213, 213);">
+                            <div class="card-body"  >
+                                <p >{{m.body}}</p>
+                            </div>
                         </div>
+                        <br>
                     </div>
-                    <br>
+                    {% endif %}
+                    {% endfor %}
                 </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-          </div>
-          <br>
-          <form action="" method="POST">
-            {% csrf_token %}
-            {{form.body}}
-            <br>
-            <input type="submit" value="Send" class="btn btn-outline-primary">
-          </form>
+              </div>
+              <br>
+              <form action="" method="POST">
+                {% csrf_token %}
+                {{form.body}}
+                <br>
+                <input type="submit" value="Send" class="btn btn-outline-primary">
+              </form>
+        </div>
+
+        <div class="room-containers">
+            <div class="card text-center">
+                <div class="card-header">
+                    Participants
+                </div>
+                <div class="card-body">
+                    {% for par in room.participant.all %}
+                  <h5 class="card-title">@{{par}}</h5>
+                    {% endfor %}
+                </div>
+              </div>
+        </div>
     </div>
+
 
 {% endblock %}

@@ -6,3 +6,5 @@ urlpatterns = [
     path('', include('base.urls')),
     path('', include('users.urls'))
 ]
+
+handler404 = "project.views.handler404" 

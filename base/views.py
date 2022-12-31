@@ -6,17 +6,37 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 # Create your views here.
 
+
+def search(word, atributes_list):
+    match_dic = {}
+    for attr in atributes_list:
+        count = 0
+        for lettre in word:
+            if lettre in attr:
+                count += 1
+        match_dic[count] = attr
+    indexes = [i for i in match_dic]
+    max_index = max(indexes)
+    return match_dic[max_index]
+
+
+
 def home(request):
+    result = ''
     if request.GET.get('query') != None:
         query = request.GET.get('query')
+        rooms_name = [f.name for f in Room.objects.all()]
+        result = search(query,rooms_name)
     else :
         query = ''
-
+    
     rooms = Room.objects.filter(
         Q(topic__title__contains=query)|
-        Q(name__contains=query)|
+        Q(name__contains=result)|
         Q(host__username__contains=query)
     )
+    if (result != '') and (result != query):
+        messages.warning(request, 'Did you mean <strong>'+ result+'</strong>')
     topics = Topic.objects.all()
     count_room = rooms.count()
     context = {
